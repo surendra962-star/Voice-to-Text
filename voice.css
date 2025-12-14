@@ -1,0 +1,177 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', Arial, sans-serif;
+}
+
+/* ================= BODY ================= */
+body {
+  height: 100vh;
+  background: #121212;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* ================= GEOMETRIC BACKGROUND ================= */
+.geo-bg {
+  position: absolute;
+  width: 1500px;
+  height: 1500px;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.geo-bg span {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(220,53,69,0.2);
+  animation:
+    rotateGeo 50s linear infinite,
+    floatGeo 22s ease-in-out infinite;
+}
+
+/* Multiple layers */
+.geo-bg span:nth-child(1) { inset:   0px;  opacity: 0.18; }
+.geo-bg span:nth-child(2) { inset: 200px; opacity: 0.15; }
+.geo-bg span:nth-child(3) { inset: 400px; opacity: 0.12; }
+.geo-bg span:nth-child(4) { inset: 600px; opacity: 0.10; }
+.geo-bg span:nth-child(5) { inset: 800px; opacity: 0.08; }
+.geo-bg span:nth-child(6) { inset: 1000px;opacity: 0.06; }
+
+/* Alternate speeds */
+.geo-bg span:nth-child(even) {
+  animation-duration: 80s, 30s;
+  animation-direction: reverse, alternate;
+}
+
+/* Voice reaction */
+.geo-bg.voice-react span {
+  border-color: rgba(220,53,69,0.6);
+  box-shadow: 0 0 25px rgba(220,53,69,0.4);
+}
+
+/* Geometry animations */
+@keyframes rotateGeo {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes floatGeo {
+  0%   { transform: translate(0,0); }
+  25%  { transform: translate(50px,-30px); }
+  50%  { transform: translate(-40px,50px); }
+  75%  { transform: translate(30px,25px); }
+  100% { transform: translate(0,0); }
+}
+
+/* ================= VOICE CONTAINER ================= */
+.voice-container {
+  background: #1c1c1c;
+  width: 520px;
+  padding: 55px;
+  border-radius: 30px;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+
+  box-shadow:
+    0 0 30px rgba(220,53,69,0.6),
+    0 0 70px rgba(220,53,69,0.35);
+
+  animation: slideUp 1s ease forwards;
+  transition: transform 0.12s linear;
+  will-change: transform;
+}
+
+/* Neon pulse */
+.voice-container.neon {
+  box-shadow:
+    0 0 40px rgba(220,53,69,0.9),
+    0 0 120px rgba(220,53,69,0.8),
+    0 0 200px rgba(220,53,69,0.6);
+}
+
+/* ================= TITLE ================= */
+.voice-container h2 {
+  font-size: 32px;
+  color: #dc3545;
+  margin-bottom: 25px;
+}
+
+/* ================= TEXTAREA ================= */
+textarea {
+  width: 100%;
+  height: 180px;
+  padding: 18px;
+  border-radius: 14px;
+  background: #181818;
+  border: 2px solid #dc3545;
+  color: #f1f1f1;
+  resize: none;
+  outline: none;
+}
+
+textarea:focus {
+  box-shadow: 0 0 18px rgba(220,53,69,0.8);
+}
+
+/* ================= CONFIDENCE METER ================= */
+.confidence-meter {
+  width: 100%;
+  height: 12px;
+  background: #2a2a2a;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 20px;
+}
+
+.confidence-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #00bfff, #00ff99);
+  transition: width 0.1s linear, background 0.2s;
+}
+
+.confidence-label {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #aaa;
+}
+
+/* ================= BUTTONS ================= */
+.buttons {
+  margin-top: 30px;
+}
+
+button {
+  padding: 14px 34px;
+  margin: 8px;
+  border-radius: 35px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, #dc3545, #b02a37);
+}
+
+button:hover {
+  transform: translateY(-3px);
+}
+
+/* ================= STATUS ================= */
+#status {
+  margin-top: 18px;
+  font-size: 14px;
+  color: #cfcfcf;
+}
+
+/* ================= ENTRY ================= */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(60px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

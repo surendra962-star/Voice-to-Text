@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Welcome</title>
+  <link rel="stylesheet" href="welcome.css">
+</head>
+<body>
+
+  <div class="welcome-container">
+    <h1 id="welcome-text"></h1>
+    <p>Voice to Text Web Application</p>
+
+    <a href="voice.html" class="next-btn">Continue →</a>
+  </div>
+
+  <script>
+    const text = "WELCOME";
+    const target = document.getElementById("welcome-text");
+    let i = 0;
+
+    function animateText() {
+      if (i < text.length) {
+        target.innerHTML += text[i];
+        i++;
+        setTimeout(animateText, 500);
+      }
+    }
+    animateText();
+  </script>
+
+</body>
+</html>

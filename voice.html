@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Voice to Text</title>
+  <link rel="stylesheet" href="voice.css">
+</head>
+<body>
+
+  <!-- Geometric Background -->
+  <div class="geo-bg" id="geoBg">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <!-- Main Container -->
+  <div class="voice-container" id="voiceBox">
+    <h2>🎤 Voice to Text</h2>
+
+    <textarea id="output" placeholder="Click Start and speak..."></textarea>
+
+    <!-- Voice Confidence Meter -->
+    <div class="confidence-meter">
+      <div class="confidence-bar" id="confidenceBar"></div>
+    </div>
+    <p class="confidence-label">Voice Confidence</p>
+
+    <div class="buttons">
+      <button id="startBtn">Start</button>
+      <button id="stopBtn">Stop</button>
+    </div>
+
+    <p id="status"></p>
+  </div>
+
+  <script src="voice.js"></script>
+</body>
+</html>
