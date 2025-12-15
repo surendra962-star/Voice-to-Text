@@ -8,7 +8,7 @@
 /* ================= BODY ================= */
 body {
   height: 100vh;
-  background: #121212;
+  background: radial-gradient(circle at top, #4b0f2c, #14050b, #000);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -18,8 +18,8 @@ body {
 /* ================= GEOMETRIC BACKGROUND ================= */
 .geo-bg {
   position: absolute;
-  width: 1500px;
-  height: 1500px;
+  width: 1600px;
+  height: 1600px;
   z-index: 0;
   pointer-events: none;
 }
@@ -28,77 +28,47 @@ body {
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  border: 2px solid rgba(220,53,69,0.2);
-  animation:
-    rotateGeo 50s linear infinite,
-    floatGeo 22s ease-in-out infinite;
+  border: 3px solid rgba(255,80,120,0.4);
+  animation: rotateGeo 40s linear infinite,
+             floatGeo 18s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px rgba(255,80,120,0.6));
 }
 
-/* Multiple layers */
-.geo-bg span:nth-child(1) { inset:   0px;  opacity: 0.18; }
-.geo-bg span:nth-child(2) { inset: 200px; opacity: 0.15; }
-.geo-bg span:nth-child(3) { inset: 400px; opacity: 0.12; }
-.geo-bg span:nth-child(4) { inset: 600px; opacity: 0.10; }
-.geo-bg span:nth-child(5) { inset: 800px; opacity: 0.08; }
-.geo-bg span:nth-child(6) { inset: 1000px;opacity: 0.06; }
+.geo-bg span:nth-child(1){ inset:0 }
+.geo-bg span:nth-child(2){ inset:200px }
+.geo-bg span:nth-child(3){ inset:400px }
+.geo-bg span:nth-child(4){ inset:600px }
+.geo-bg span:nth-child(5){ inset:800px }
+.geo-bg span:nth-child(6){ inset:1000px }
 
-/* Alternate speeds */
-.geo-bg span:nth-child(even) {
-  animation-duration: 80s, 30s;
-  animation-direction: reverse, alternate;
-}
-
-/* Voice reaction */
 .geo-bg.voice-react span {
-  border-color: rgba(220,53,69,0.6);
-  box-shadow: 0 0 25px rgba(220,53,69,0.4);
+  border-color: rgba(255,0,80,0.95);
+  box-shadow: 0 0 40px rgba(255,0,80,0.9);
 }
 
-/* Geometry animations */
-@keyframes rotateGeo {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-
-@keyframes floatGeo {
-  0%   { transform: translate(0,0); }
-  25%  { transform: translate(50px,-30px); }
-  50%  { transform: translate(-40px,50px); }
-  75%  { transform: translate(30px,25px); }
-  100% { transform: translate(0,0); }
-}
-
-/* ================= VOICE CONTAINER ================= */
+/* ================= CONTAINER ================= */
 .voice-container {
-  background: #1c1c1c;
+  background: rgba(20,20,20,0.95);
   width: 520px;
+  max-width: 92%;
   padding: 55px;
   border-radius: 30px;
   text-align: center;
-  position: relative;
   z-index: 2;
-
-  box-shadow:
-    0 0 30px rgba(220,53,69,0.6),
-    0 0 70px rgba(220,53,69,0.35);
-
+  box-shadow: 0 0 40px rgba(255,0,80,0.5);
   animation: slideUp 1s ease forwards;
-  transition: transform 0.12s linear;
-  will-change: transform;
+  transition: transform 0.15s linear;
 }
 
-/* Neon pulse */
 .voice-container.neon {
   box-shadow:
-    0 0 40px rgba(220,53,69,0.9),
-    0 0 120px rgba(220,53,69,0.8),
-    0 0 200px rgba(220,53,69,0.6);
+    0 0 60px rgba(255,0,80,1),
+    0 0 200px rgba(255,0,80,0.9);
 }
 
 /* ================= TITLE ================= */
-.voice-container h2 {
-  font-size: 32px;
-  color: #dc3545;
+h2 {
+  color: #ff4d6d;
   margin-bottom: 25px;
 }
 
@@ -108,22 +78,21 @@ textarea {
   height: 180px;
   padding: 18px;
   border-radius: 14px;
-  background: #181818;
-  border: 2px solid #dc3545;
+  background: #0e0e0e;
+  border: 2px solid #ff4d6d;
   color: #f1f1f1;
   resize: none;
-  outline: none;
 }
 
 textarea:focus {
-  box-shadow: 0 0 18px rgba(220,53,69,0.8);
+  box-shadow: 0 0 22px rgba(255,77,109,0.9);
 }
 
-/* ================= CONFIDENCE METER ================= */
+/* ================= CONFIDENCE ================= */
 .confidence-meter {
   width: 100%;
   height: 12px;
-  background: #2a2a2a;
+  background: #333;
   border-radius: 10px;
   overflow: hidden;
   margin-top: 20px;
@@ -132,14 +101,14 @@ textarea:focus {
 .confidence-bar {
   height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, #00bfff, #00ff99);
-  transition: width 0.1s linear, background 0.2s;
+  background: linear-gradient(90deg,#00e5ff,#00ff9c);
+  transition: width 0.1s linear;
 }
 
 .confidence-label {
   margin-top: 6px;
   font-size: 12px;
-  color: #aaa;
+  color: #bbb;
 }
 
 /* ================= BUTTONS ================= */
@@ -156,22 +125,31 @@ button {
   font-size: 16px;
   font-weight: 600;
   color: white;
-  background: linear-gradient(135deg, #dc3545, #b02a37);
+  background: linear-gradient(135deg, #ff4d6d, #c9184a);
 }
 
 button:hover {
   transform: translateY(-3px);
 }
 
-/* ================= STATUS ================= */
 #status {
   margin-top: 18px;
   font-size: 14px;
-  color: #cfcfcf;
+  color: #ddd;
 }
 
-/* ================= ENTRY ================= */
+/* ================= ANIMATIONS ================= */
+@keyframes rotateGeo {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes floatGeo {
+  0% { transform: translate(0,0); }
+  50% { transform: translate(40px,-40px); }
+  100% { transform: translate(0,0); }
+}
+
 @keyframes slideUp {
   from { opacity: 0; transform: translateY(60px); }
-  to   { opacity: 1; transform: translateY(0); }
+  to { opacity: 1; transform: translateY(0); }
 }
