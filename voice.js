@@ -2,41 +2,56 @@ const SpeechRecognition =
   window.SpeechRecognition || window.webkitSpeechRecognition;
 
 if (!SpeechRecognition) {
-  alert("Speech Recognition not supported. Use Google Chrome.");
+  alert("Speech Recognition not supported. Use Chrome.");
 }
 
+/* ================= SPEECH RECOGNITION ================= */
 const recognition = new SpeechRecognition();
 recognition.lang = "en-US";
 recognition.continuous = true;
 recognition.interimResults = true;
 
+/* ================= ELEMENTS ================= */
 const output = document.getElementById("output");
 const status = document.getElementById("status");
 const container = document.getElementById("voiceBox");
 const geoBg = document.getElementById("geoBg");
 const confidenceBar = document.getElementById("confidenceBar");
+const startBtn = document.getElementById("startBtn");
+const stopBtn = document.getElementById("stopBtn");
 
 let finalTranscript = "";
+let micAllowed = false;
 
 /* ================= AUDIO ANALYSER ================= */
 let audioCtx, analyser, mic, dataArray, animationId;
 
 async function startAudioListener() {
-  audioCtx = new (window.AudioContext || window.webkitSpeechRecognition)();
-  analyser = audioCtx.createAnalyser();
-  analyser.fftSize = 256;
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    micAllowed = true;
 
-  const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-  mic = audioCtx.createMediaStreamSource(stream);
-  mic.connect(analyser);
+    audioCtx = new AudioContext();
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 256;
 
-  dataArray = new Uint8Array(analyser.frequencyBinCount);
-  animateBySound();
+    mic = audioCtx.createMediaStreamSource(stream);
+    mic.connect(analyser);
+
+    dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+    status.innerText = "Listening...";
+    animateBySound();
+  } catch {
+    status.innerText = "Microphone permission denied";
+  }
 }
 
 function stopAudioListener() {
+  micAllowed = false;
   if (audioCtx) audioCtx.close();
   cancelAnimationFrame(animationId);
+
   container.classList.remove("neon");
   geoBg.classList.remove("voice-react");
   container.style.transform = "none";
@@ -45,33 +60,25 @@ function stopAudioListener() {
 
 /* ================= SOUND REACTIVE ================= */
 function animateBySound() {
+  if (!micAllowed) return;
+
   analyser.getByteFrequencyData(dataArray);
-
   const volume =
-    dataArray.reduce((a, b) => a + b) / dataArray.length;
+    dataArray.reduce((a,b)=>a+b) / dataArray.length;
 
-  /* 3D movement */
-  const tiltX = Math.min(volume / 18, 14);
-  const tiltY = Math.min(volume / 25, 10);
-  const lift  = Math.min(volume / 8, 20);
-
+  /* Movement */
   container.style.transform =
-    `translateY(-${lift}px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+    `translateY(-${volume/12}px) rotateX(${volume/25}deg)`;
 
-  /* Confidence meter */
+  /* Confidence */
   const confidence = Math.min(volume * 1.5, 100);
   confidenceBar.style.width = confidence + "%";
 
-  if (confidence > 70) {
-    confidenceBar.style.background = "linear-gradient(90deg,#ff4d4d,#ff9900)";
+  /* 🔥 GLOW ONLY WHEN SPEAKING */
+  if (volume > 35) {
     container.classList.add("neon");
     geoBg.classList.add("voice-react");
-  } else if (confidence > 35) {
-    confidenceBar.style.background = "linear-gradient(90deg,#ffd700,#00ff99)";
-    container.classList.remove("neon");
-    geoBg.classList.remove("voice-react");
   } else {
-    confidenceBar.style.background = "linear-gradient(90deg,#00bfff,#00ff99)";
     container.classList.remove("neon");
     geoBg.classList.remove("voice-react");
   }
@@ -80,39 +87,34 @@ function animateBySound() {
 }
 
 /* ================= BUTTON EVENTS ================= */
-document.getElementById("startBtn").onclick = async () => {
-  recognition.start();
-  status.innerText = "Listening...";
+startBtn.onclick = async () => {
   finalTranscript = "";
+  output.value = "";
+  recognition.start();
   await startAudioListener();
 };
 
-document.getElementById("stopBtn").onclick = () => {
+stopBtn.onclick = () => {
   recognition.stop();
-  status.innerText = "Stopped";
-  stopAudioListener();
 };
 
-/* ================= LIVE TRANSCRIPTION ================= */
+/* ================= TRANSCRIPTION ================= */
 recognition.onresult = (event) => {
-  let interimTranscript = "";
-
+  let interim = "";
   for (let i = event.resultIndex; i < event.results.length; i++) {
-    const transcript = event.results[i][0].transcript;
-    if (event.results[i].isFinal) {
-      finalTranscript += transcript + " ";
-    } else {
-      interimTranscript += transcript;
-    }
+    const text = event.results[i][0].transcript;
+    if (event.results[i].isFinal) finalTranscript += text + " ";
+    else interim += text;
   }
-  output.value = finalTranscript + interimTranscript;
+  output.value = finalTranscript + interim;
+};
+
+/* ================= AUTO STOP ================= */
+recognition.onend = () => {
+  status.innerText = "Stopped";
+  stopAudioListener();
 };
 
 recognition.onerror = (e) => {
   status.innerText = "Error: " + e.error;
-};
-
-recognition.onend = () => {
-  status.innerText = "Stopped";
-  stopAudioListener();
 };
